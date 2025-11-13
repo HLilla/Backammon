@@ -1,26 +1,20 @@
 package jatek;
 
-import java.awt.*;
+import java.awt.Color;
 
-public class Korong{
+public class Korong {
+    private int x, y;    // Korong pozíciója
+    private Color szin;  // Korong színe
 
-    private int x; // Korong x pozíciója
-    private int y; // Korong y pozíciója
-    private Color szin; //Korong szine
-    private final int DIAMETER = 30; // Korong mérete
-
-    public Korong(int csapat, int xhol, int yhol) {
-        this.szin = (csapat == 1) ? Color.WHITE : Color.BLACK;
-        this.x=xhol;
-        this.y=yhol;
+    public Korong(int x, int y, Color szin) {
+        this.x = x;
+        this.y = y;
+        this.szin = szin;
     }
-    
-    public void kirajzol(Graphics g) {
-        g.setColor(szin);
-        g.fillOval(x, y, DIAMETER, DIAMETER);
-    }
-
-    // Pozíciók getterei
     public int getX() {return x;}
     public int getY() {return y;}
+    public Color getSzin() {return szin;}
+    public void setX(int x) {this.x = x;}
+    public void setY(int y) {this.y = y;}
+    public void setSzin(Color szin) {this.szin = szin;}
 }

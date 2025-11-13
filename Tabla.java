@@ -2,13 +2,23 @@ package jatek;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class Tabla extends JPanel {
-    private final int NUM_TRIANGLES = 12;  // 12 felül, 12 alul = 24
+    private int numTriangle = 12;  // 12 felül, 12 alul = 24
+    private List<Korong> korongok; 
+    
     public Tabla() {
-        setPreferredSize(new Dimension(800, 500));
+        setSize(new Dimension(800, 500));
         setBackground(new Color(200, 160, 100));
     }
+    
+    public void setKorongok(List<Korong> korongok) {
+        this.korongok = korongok;
+        repaint();
+    }
+
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         int width = getWidth();
@@ -17,7 +27,7 @@ public class Tabla extends JPanel {
         int triangleWidth = (width - barWidth) / 12;
         int triangleHeight = height *2/5;
         // Felső sor
-        for (int i = 0; i < NUM_TRIANGLES; i++) {
+        for (int i = 0; i < numTriangle; i++) {
             int x = i * triangleWidth;
             if (i >= 6) x += barWidth;
 
@@ -32,7 +42,7 @@ public class Tabla extends JPanel {
             g.drawPolygon(triangle);
         }
         // Alsó sor
-        for (int i = 0; i < NUM_TRIANGLES; i++) {
+        for (int i = 0; i < numTriangle; i++) {
             int x = i * triangleWidth;
             if (i >= 6) x += barWidth;
 
@@ -49,5 +59,13 @@ public class Tabla extends JPanel {
         // Középső sáv (bar)
         g.setColor(new Color(120, 80, 20));
         g.fillRect((width - barWidth) / 2, 0, barWidth, height);
+        
+        // Korongok kirajzolása
+        if (korongok != null) {
+            for (Korong korong : korongok) {
+                g.setColor(korong.getSzin());
+                g.fillOval(korong.getX(), korong.getY(), width/15 , height/15);
+            }
+        }
     }
 }
