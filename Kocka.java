@@ -11,8 +11,9 @@ public class Kocka extends JPanel {
     private int oldal2;
     private Random random;  // Random objektum a dobás véletlenszerűségéhez
     private JButton dobasGomb;  // A gomb, ami dobja a kockát
-    private JLabel kockaKepe1;
-    private JLabel kockaKepe2;
+    private static JLabel kockaKepe1;
+    private static JLabel kockaKepe2;
+    public static int kijeloltszam=0;
     
     // Konstruktor
     public Kocka() {
@@ -60,14 +61,16 @@ public class Kocka extends JPanel {
         kockaKepe1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-            	Jatek.kockaSzama=oldal1;
+            	kockaKepe1.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            	kijeloltszam=oldal1;
             }
         });
 
         kockaKepe2.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                Jatek.kockaSzama=oldal2;
+            	kockaKepe2.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            	kijeloltszam=oldal2;
             }
         });
     }
@@ -114,6 +117,10 @@ public class Kocka extends JPanel {
         kockaKepe2.setIcon(icon2);
         revalidate();
         repaint();
+    }
+    public static void setBorder() {
+    	kockaKepe1.setBorder(null);
+    	kockaKepe2.setBorder(null);
     }
 
 }

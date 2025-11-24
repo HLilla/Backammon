@@ -45,13 +45,13 @@ public class Main {
         Jatek jatekPanel = new Jatek();
         jatekPanel.setBounds(0, 0, 900, 700);
         jatekPanel.setOpaque(false); // átlátszó, hogy a tábla látszódjon
-        layerPane.add(jatekPanel, JLayeredPane.MODAL_LAYER); // magasabb réteg
+        layerPane.add(jatekPanel, JLayeredPane.PALETTE_LAYER); // magasabb réteg
 
         // Dobókocka réteg
         Kocka dobokockaPanel = new Kocka();
         dobokockaPanel.setOpaque(false);
         dobokockaPanel.setBounds(100, 210, 692, 256);
-        layerPane.add(dobokockaPanel, JLayeredPane.PALETTE_LAYER);
+        layerPane.add(dobokockaPanel, JLayeredPane.MODAL_LAYER);
 
         // Új JPanel, ami tartalmazza a JLayeredPane-t
         JPanel wrapper = new JPanel(new BorderLayout());

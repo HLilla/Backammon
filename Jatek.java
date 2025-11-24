@@ -1,9 +1,11 @@
 package jatek;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -11,7 +13,6 @@ public class Jatek extends JPanel  {
 	private ArrayList<Mezo> mezok = new ArrayList<>();
 	private ArrayList<Korong> korongok = new ArrayList<>();
 	public int koreVan=0;
-	public static int kockaSzama=0;
     public Jatek() {
         setPreferredSize(new Dimension(900, 700));
         setOpaque(false);
@@ -56,14 +57,14 @@ public class Jatek extends JPanel  {
           int eltolas=0;   
          // Arany korongok létrehozása
             for (int j = 0; j < mezok.get(i).getArany(); j++) {
-                Korong k = new Korong(ujMezore(mezok.get(i), eltolas), 0);
+                Korong k = new Korong(ujMezore(mezok.get(i), eltolas), 0, mezok.get(i));
                 korongok.add(k);
                 eltolas+=1;
             }
             eltolas=0;
             // Fekete korongok létrehozása
             for (int j = 0; j < mezok.get(i).getFekete(); j++) {
-                Korong k = new Korong(ujMezore(mezok.get(i), eltolas), 1);
+                Korong k = new Korong(ujMezore(mezok.get(i), eltolas), 1, mezok.get(i));
                 korongok.add(k);
                 eltolas+=1;
             }
@@ -72,6 +73,9 @@ public class Jatek extends JPanel  {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 korongKattintas(e.getX(), e.getY());
+                System.out.println("Katt");
+                Kocka.setBorder();
+                Kocka.kijeloltszam=0;
             }
         });
     }
@@ -100,45 +104,62 @@ public class Jatek extends JPanel  {
         	return new Koordinate(x,y);
 	    }
 	    private void korongKattintas(int x, int y) {
-	        if (kockaSzama == 0) return;
+	        System.out.println(Kocka.kijeloltszam);	        
+	        if (Kocka.kijeloltszam == 0) return;
+
 	        for (Korong k : korongok) {            
 	            if (korongon(k,x,y)) {
 	                if (k.getSzin() != koreVan) return;
+
 	                int aktIndex = mezoIndex(k);
 	                if (aktIndex == -1) return;
-	                int ujIndex = aktIndex + kockaSzama;
+
+	                int irany = (k.getSzin() == 0) ? +1 : -1;
+	                int ujIndex = aktIndex + irany * Kocka.kijeloltszam;
 	                if (ujIndex < 0 || ujIndex >= mezok.size()) return;
-	                // regi mezo
+
+	                // régi mező korongjainak frissítése
 	                Mezo regi = mezok.get(aktIndex);
 	                if (k.getSzin() == 0) regi.minArany();
-	                else                 regi.minFekete();
-	                // ujmezo
+	                else regi.minFekete();
+
+	                // új mező korongjainak frissítése
 	                Mezo cel = mezok.get(ujIndex);
-	                int hanyadik = (k.getSzin() == 0) ? cel.getArany() : cel.getFekete();
-	                //koordinata atallitas
-	                k.setKoordinate(ujMezore(cel, hanyadik));
-	                // uj mezohoz adas
 	                if (k.getSzin() == 0) cel.adArany();
-	                else                 cel.adFekete();
+	                else cel.adFekete();
+
+	                // mindkét mező korongjainak újrarajzolása
+	                rajzolKorongokat(regi);
+	                rajzolKorongokat(cel);
+
 	                repaint();
 	                return;
 	            }
 	        }
 	    }
+
 	    private int mezoIndex(Korong k) {
-	        Koordinate pos = k.getKoordinate();
-	        for (int i = 0; i < mezok.size(); i++) {
-	            Koordinate m = mezok.get(i).getKoordinate();
-	            if (pos.getX() >= m.getX() && pos.getX() <= m.getX() + 60) {
-	                return i;
-	            }
-	        }
-	        return -1;
+	    	Mezo mezo = k.getMezo();
+	    	return mezo.getSzan();
 	    }
 	    private boolean korongon(Korong k, int x, int y) {
 	    	int cx = k.getKoordinate().getX();
             int cy = k.getKoordinate().getY();
             // Kattintás beleesik-e a korong 60x60-as területére
             return (x >= cx && x <= cx + 60 && y >= cy && y <= cy + 60);
+
+	    }
+	    private void rajzolKorongokat(Mezo m) {
+	        korongok.removeIf(k -> k.getMezo() == m);
+	        // arany korongok újragenerálása
+	        for (int i = 0; i < m.getArany(); i++) {
+	            Korong k = new Korong(ujMezore(m, i), 0, m);
+	            korongok.add(k);
+	        }
+	        // fekete korongok újragenerálása
+	        for (int i = 0; i < m.getFekete(); i++) {
+	            Korong k = new Korong(ujMezore(m, i), 1, m);
+	            korongok.add(k);
+	        }
 	    }
 }

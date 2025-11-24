@@ -6,11 +6,13 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Korong {
+	Mezo m;
 	Koordinate k;
     private int szin;  // Korong színe
     private BufferedImage kep; //Korong képe
 
-    public Korong(Koordinate k, int szin) {
+    public Korong(Koordinate k, int szin, Mezo m) {
+    	this.m=m;
         this.szin = szin;
         this.k=k;
         try {
@@ -28,4 +30,6 @@ public class Korong {
     public BufferedImage getKep() {return kep;}
     public void setKoordinate(Koordinate k) {this.k=k;}
     public Koordinate getKoordinate() {return k;}
+    public Mezo getMezo() {return m;}
+    public void setMezo(Mezo m) {this.m=m;}
 }
