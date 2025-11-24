@@ -2,70 +2,32 @@ package jatek;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 
 public class Tabla extends JPanel {
-    private int numTriangle = 12;  // 12 felül, 12 alul = 24
-    private List<Korong> korongok; 
-    
+    private BufferedImage kep;
+
     public Tabla() {
-        setSize(new Dimension(800, 500));
-        setBackground(new Color(200, 160, 100));
-    }
-    
-    public void setKorongok(List<Korong> korongok) {
-        this.korongok = korongok;
-        repaint();
+        try {
+            kep = ImageIO.read(new File("tabla.png"));
+        } catch (IOException ex) {
+            System.err.println("Nem sikerült betölteni a képet");
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int width = getWidth();
-        int height = getHeight();
-        int barWidth = width / 13;
-        int triangleWidth = (width - barWidth) / 12;
-        int triangleHeight = height *2/5;
-        // Felső sor
-        for (int i = 0; i < numTriangle; i++) {
-            int x = i * triangleWidth;
-            if (i >= 6) x += barWidth;
+        Graphics2D g2d = (Graphics2D) g.create();
+        if (kep != null) {
+            int panelW = getWidth();
+            int panelH = getHeight();
 
-            Polygon triangle = new Polygon();
-            triangle.addPoint(x, 0);
-            triangle.addPoint(x + triangleWidth, 0);
-            triangle.addPoint(x + triangleWidth / 2, triangleHeight);
-
-            g.setColor((i % 2 == 0) ? Color.WHITE : Color.DARK_GRAY);
-            g.fillPolygon(triangle);
-            g.setColor(Color.BLACK);
-            g.drawPolygon(triangle);
+            g2d.drawImage(kep, 0, 0, panelW, panelH, this);
         }
-        // Alsó sor
-        for (int i = 0; i < numTriangle; i++) {
-            int x = i * triangleWidth;
-            if (i >= 6) x += barWidth;
-
-            Polygon triangle = new Polygon();
-            triangle.addPoint(x, height);
-            triangle.addPoint(x + triangleWidth, height);
-            triangle.addPoint(x + triangleWidth / 2, height - triangleHeight);
-
-            g.setColor((i % 2 == 0) ? Color.DARK_GRAY : Color.WHITE);
-            g.fillPolygon(triangle);
-            g.setColor(Color.BLACK);
-            g.drawPolygon(triangle);
-        }
-        // Középső sáv (bar)
-        g.setColor(new Color(120, 80, 20));
-        g.fillRect((width - barWidth) / 2, 0, barWidth, height);
-        
-        // Korongok kirajzolása
-        if (korongok != null) {
-            for (Korong korong : korongok) {
-                g.setColor(korong.getSzin());
-                g.fillOval(korong.getX(), korong.getY(), width/15 , height/15);
-            }
-        }
+        g2d.dispose();
     }
 }

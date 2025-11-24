@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Menu extends JPanel{
+	private JPanel Panel;
+	public int valasztottSzam=-1;
     public enum lehet{
         ONEPLAYER,
         TWOPLAYER,
@@ -11,7 +13,8 @@ public class Menu extends JPanel{
         SAVEDTWOPLAYER,
         QUIT
     }
-    public Menu(){
+    public Menu(JPanel mainPanel) {
+        this.Panel = mainPanel;
         setPreferredSize(new Dimension(800, 500));
         setBackground(new Color(200, 160, 100));
         setLayout(new GridBagLayout());
@@ -46,7 +49,7 @@ public class Menu extends JPanel{
         }
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 0, 10, 0); // space between buttons
+        gbc.insets = new Insets(10, 0, 10, 0); // gombok közti hely
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
@@ -56,22 +59,47 @@ public class Menu extends JPanel{
         gbc.gridy = 3; add(stp, gbc);
         gbc.gridy = 4; add(q, gbc);
 
-        op.addActionListener(e -> onSelect(lehet.ONEPLAYER));
-        tp.addActionListener(e -> onSelect(lehet.TWOPLAYER));
-        sop.addActionListener(e -> onSelect(lehet.SAVEDONEPLAYER));
-        stp.addActionListener(e -> onSelect(lehet.SAVEDTWOPLAYER));
-        q.addActionListener(e -> onSelect(lehet.QUIT));
+        op.addActionListener(e -> {
+        	valasztottSzam = onSelect(lehet.ONEPLAYER);
+            switchToGame();
+        });
+        tp.addActionListener(e -> {
+        	valasztottSzam = onSelect(lehet.TWOPLAYER);
+            switchToGame();
+        });
+        sop.addActionListener(e -> {
+        	valasztottSzam = onSelect(lehet.SAVEDONEPLAYER);
+            switchToGame();
+        });
+        stp.addActionListener(e -> {
+        	valasztottSzam = onSelect(lehet.SAVEDTWOPLAYER);
+            switchToGame();
+        });
+        q.addActionListener(e -> System.exit(0));
+    }
+    
+    private void switchToGame() {
+        CardLayout cl = (CardLayout) Panel.getLayout();
+        cl.show(Panel, "TABLA");
     }
 
-     private void onSelect(lehet option) {
-        switch (option) {
-            case ONEPLAYER -> JOptionPane.showMessageDialog(this, "Starting 1 Player game...");
-            case TWOPLAYER -> JOptionPane.showMessageDialog(this, "Starting 2 Player game...");
-            case SAVEDONEPLAYER -> JOptionPane.showMessageDialog(this, "Loading saved 1P game...");
-            case SAVEDTWOPLAYER -> JOptionPane.showMessageDialog(this, "Loading saved 2P game...");
-            case QUIT -> System.exit(0);
+     private int onSelect(lehet option) {
+    	    switch (option) {
+            case ONEPLAYER:
+                return 1;
+            case TWOPLAYER:
+                return 2;
+            case SAVEDONEPLAYER:
+                return 3;
+            case SAVEDTWOPLAYER:
+                return 4;
+            case QUIT:
+                System.exit(0);
+                return -1; // nem fog ide elérni
         }
+        return -1;
     }
+     
         @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
