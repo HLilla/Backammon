@@ -12,25 +12,25 @@ public class Koordinate {
 	public void setX(int e) {this.x=e;}
 	public void setY(int e) {this.y=e;}
 	public static Koordinate mezohelye(int szam) {
-		int x=0;
-		int y=0;
-		if(szam<=5 && szam>=0) {
-			y=50;
-			x=63+62*(szam);
-		}
-		else if(szam<=11 && szam>5) {
-			y=50;
-			x=115+62*(szam);
-		}
-		else if(szam<=17 && szam>11){
-			y=580;
-			x=43+64*(szam-12);
-		}
-		else if(szam<=23 && szam>17){
-			y=580;
-			x=95+64*(szam-12);
-		}
-		Koordinate uj= new Koordinate(x,y);
-		return uj;
+	    int x = 0;
+	    int y = 0;
+	    if (szam >= 12 && szam <= 17) {
+	        y = 50;
+	        x = 63 + 62 * (szam-12);
+	    } else if (szam >= 18 && szam <= 23) {
+	        y = 50;
+	        x = 115 + 62 * (szam-12);
+
+	    } else if (szam >= 6 && szam <= 11) {
+	        y = 580;
+	        x = 43 + 64 * (23-szam-12);
+
+	    } else if (szam >= 0 && szam <= 5) {
+	        y = 580;
+	        x = 95 + 64 * (23-szam-12);
+	    }
+
+	    return new Koordinate(x, y);
 	}
+
 }

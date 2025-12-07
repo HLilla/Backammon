@@ -1,5 +1,6 @@
 package jatek;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +25,18 @@ public class Korong {
         	}
         } catch (IOException ex) {
             System.err.println("Nem sikerült betölteni a képet");
+        }
+    }
+    public void render(Graphics g) {
+        if (kep != null) {
+            g.drawImage(
+                kep,
+                k.getX(),
+                k.getY(),
+                60,
+                60,
+                null
+            );
         }
     }
     public int getSzin() {return szin;}

@@ -79,6 +79,9 @@ public class Menu extends JPanel{
     }
     
     private void switchToGame() {
+    	JPanel newGamePanel = Main.createGamePanel();
+    	Panel.remove(Panel.getComponentCount() - 1);
+    	Panel.add(newGamePanel, "TABLA");
         CardLayout cl = (CardLayout) Panel.getLayout();
         cl.show(Panel, "TABLA");
     }

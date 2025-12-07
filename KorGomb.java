@@ -20,7 +20,7 @@ class KorGomb extends JButton {
         setPreferredSize(d);
         setMinimumSize(d);
         setMaximumSize(d);
-        setSize(d);  // akkor is fix, ha null layout lenne
+        setSize(d);
     }
 
     @Override

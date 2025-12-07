@@ -4,18 +4,24 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Main {
-
+	private static JPanel mainPanel;
+	private static CardLayout cl;
+	public static void visszaMenu() {
+	    cl.show(mainPanel, "MENU");
+	}
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
 
             JFrame frame = new JFrame("Backgammon");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(900, 700);
+            frame.setSize(1000, 700);
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);
 
             // CardLayout a panelváltáshoz
-            JPanel mainPanel = new JPanel(new CardLayout());
+            mainPanel = new JPanel();
+            cl = new CardLayout();
+            mainPanel.setLayout(cl);
 
             // Menu panel
             Menu menu = new Menu(mainPanel);
@@ -24,6 +30,10 @@ public class Main {
 
             // Tabla panel létrehozása (LayeredPane)
             JPanel gamePanel = createGamePanel();
+            
+            if(option==2 || option==4) {
+            	Jatek.vanRobot=true;
+            	}
             mainPanel.add(gamePanel, "TABLA");
 
             frame.setContentPane(mainPanel);
@@ -32,7 +42,7 @@ public class Main {
     }
 
     // Segédfüggvény a játék panel létrehozásához
-    private static JPanel createGamePanel() {
+    public static JPanel createGamePanel() {
         JLayeredPane layerPane = new JLayeredPane();
         layerPane.setPreferredSize(new Dimension(900, 700));
 
@@ -53,9 +63,15 @@ public class Main {
         dobokockaPanel.setBounds(100, 210, 692, 256);
         layerPane.add(dobokockaPanel, JLayeredPane.MODAL_LAYER);
 
-        // Új JPanel, ami tartalmazza a JLayeredPane-t
+        /// Kiírás panel a bal oldalra
+        Kiiras kiirasPanel = new Kiiras();
+        kiirasPanel.setBounds(0, 0, 150, 700);
+
+        // Wrapper panel BorderLayout-tal
         JPanel wrapper = new JPanel(new BorderLayout());
-        wrapper.add(layerPane, BorderLayout.CENTER);
+        wrapper.add(kiirasPanel, BorderLayout.WEST);      // bal oldalra
+        wrapper.add(layerPane, BorderLayout.CENTER);      // középre a játék
+
         return wrapper;
     }
 }
